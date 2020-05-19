@@ -1,12 +1,23 @@
-##### Subsetting a larger fasta file.
+##### Sorting a Fasta File and Subsetting a larger fasta file.
 
-library(seqinr)
-
-###  Create a two column text file of the names of the sequences you want to subset.  Make column 1 "index" and column 2 "ids".  Dont' include the > symbol in the sequence name
+###  Create a two column text file of the names of the sequences you want to subset.  Make column 1 "index" and column 2 "ids".  Don't include the > symbol in the sequence name
 
 ###First import the large fasta you want to subset from
+### THE LARGE FASTA MUST HAVE THE SEQUENCE NAMES IN ALPHANUMERIC ORDER
+### IF NOT ORDERED, THE SUBSETTING WILL NOT WORK - YOU'LL GET SUBSETTED GENOMES BUT WITH INCORRECT DATA
 
-genomes<-read.fasta("TVR_Red_Dog_Trim1.fasta")
+## To reorder a fasta by alphanumeric title of isolates, use the script below:
+library(ape)
+seq<-read.FASTA("yourfasta.fasta")
+
+sorted_seq<-seq[sort(labels(seq))]
+
+write.FASTA(sorted_seq, file="sortedfastaname.fasta")
+
+## Now you can subset the FASTA further.
+
+library(seqinr)
+genomes<-read.fasta("TVR_Red_Dog_Trim1.fasta", seqtype="DNA", as.string=TRUE)
 
 ###Now import the subset list file with sequence names
 

@@ -34,6 +34,10 @@ Irelandshp2<-spTransform(Irelandshp, CRS("+proj=tmerc +lat_0=53.5 +lon_0=-8 +k=1
 
 plot(Irelandshp2 + TVRzone + TVRbuff)
 
+### to add colours to layers
+
+plot(Irelandshp2 + TVRzone + TVRbuff, col=c("green", "yellow", "red"))
+
 ### Importing data points - create a text file with the X and Y coords in two columns. Then import them thus.
 
 locs<-read.table("Point locations/All TVR locs.txt", header=T)
@@ -48,8 +52,11 @@ xy2<-SpatialPointsDataFrame(coords = xy, data=locs, proj4string=CRS("+proj=tmerc
 
 ### Now, add the points to the layer
 
-points(xy2, pch=17, col="red")
+points(xy2, pch=16, col="red")
 
 ## You can add in multiple layers of points by just creating a separate points data file for each variable.
 
 ## NOTE - the spTransform function only works on layers, not on point data.  You'll have to move between Irish Grid and WGS84 data using the other script.
+
+### add a scale bar
+scalebar(100, xy=click(), type='bar', divs=2, below="kilometres")

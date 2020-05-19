@@ -35,14 +35,14 @@ TVRbuff2<-fortify(TVRbuff)
 ## Plot the polygon layers in the stacked order you wish them appear 
 
 map1<-ggplot(data=x, aes(x=X, y=Y)) +
-geom_polygon(data=TVRbuff2, aes(x=long, y=lat), colour="black", fill="white") +
-geom_polygon(data=TVRzone2, aes(x=long, y=lat), colour="black", fill="white") +
+geom_polygon(data=TVRbuff2, aes(x=long, y=lat, group = group), colour="black", fill="white") +
+geom_polygon(data=TVRzone2, aes(x=long, y=lat, group = group), colour="black", fill="white") +
 geom_point(colour="blue") +
 theme_map()
 
 ### Making an animated version
 
-anim<-map1+transition_manual(frames = Year)+labs(title="Year: {current_frame}") + shadow_mark(past=T)
+anim<-map1+transition_manual(frames = Year, cumulative=T)+labs(title="Year: {current_frame}") + shadow_mark(past=T)
 
 ### Save a copy of the animation as a .gif - 
 ### the deafult on this function saves the last animation made.

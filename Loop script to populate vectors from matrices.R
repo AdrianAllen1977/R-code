@@ -24,3 +24,53 @@ for(i in 1:nrow(geneticDistances)){
                 table[row, "HostRelatedness"] <- hostRelatedness[i, j]
         }
 }
+#### Function  -get upper traingale of matrix.
+getUpperTriangle <- function(matrix){
+
+  
+
+  # Initialise a vector to store the values in the upper triangle
+
+  vector <- c()
+
+  
+
+  # Use nested loops to visit each entry in upper trianle
+
+  for(i in 1:nrow(matrix)){
+
+    for(j in 1:ncol(matrix)){
+
+      
+
+      # Ignore upper triangle and self comparisons
+
+      if(i >= j){
+
+        next
+
+      }
+
+      
+
+      # Note progress
+
+      #Sys.sleep(1) # Make computer sleep for 1 second
+
+      #cat(paste("Current row =", i, "\tCurrent column =", j, "\n"))
+
+      
+
+      # Store value
+
+      vector[length(vector) + 1] <- matrix[i, j]
+
+    }
+
+  }
+
+  
+
+  return(vector)
+
+}

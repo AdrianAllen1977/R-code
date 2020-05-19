@@ -23,7 +23,7 @@ Irish_CRS  <- CRS("+proj=tmerc +lat_0=53.5 +lon_0=-8 +k=1.000035 +x_0=200000 +y_
                    +datum=ire65 +units=m +no_defs")
 
 ## Import your data on the locations: change this to the name of your datafile (make sure it's in .csv format)
-data <- read.csv(“Badger coords.csv”)
+data <- read.csv("Badger coords.csv")
 ## Change this to a "spatial points" object 
 data_sp <- data
 coordinates(data_sp) <- cbind(data$X, data$Y)  ## (assumes location columns are labelled "X" and "Y")

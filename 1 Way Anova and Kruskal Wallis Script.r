@@ -49,7 +49,7 @@ plot(aov(Dist~Years))
 
 ###################################################
 ## Kruskal Wallis - non parametric multi median comparison.
-##If your data is skewed, and you haven't done a transformation, you can use the non parametric Krusal Wallis test.
-### Just assemble your data into a dataframe using the script above, and then aply the test as so:
+##If your data is skewed, and you haven't done a transformation, you can use the non parametric Kruskal Wallis test.
+### Just assemble your data into a dataframe using the script above, and then apply the test as so:
 
 kruskal.test(Dist~Years)
