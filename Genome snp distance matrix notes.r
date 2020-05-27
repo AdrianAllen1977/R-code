@@ -1,5 +1,16 @@
 ### Producing a SNP distance matrix from a sequence alignment.
 
+## There is no CRAN repository for Bioconda packages.
+## With each base R refresh, you need to install from the bioconductor bioconda repository.
+
+## First install the bioconductor installer
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+## Then us the installer to install Biostrings
+
+BiocManager::install("Biostrings")
 
 setwd("Desktop/R Stuff/TVR genomes")
 
