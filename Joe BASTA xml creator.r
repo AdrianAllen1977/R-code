@@ -7,7 +7,7 @@ library(ape) # Reading in FASTA
 library(lubridate) # Converting to decimal dates
 
 # Set the path
-path <- file.path("~", "Desktop", "BuildingBASTAXML")
+path <- file.path("~", "Desktop", "TVR manuscript Sept20", "Random subsets BASTA", "Random sample fastas 2014-2017 equal numbers")
 
 # Set the date
 date <- format(Sys.Date(), "%d-%m-%y")
@@ -67,7 +67,7 @@ generateRandomMetadata <- function(nSequences, path){
                          "Date"=sample(seq(from=as.Date("01-01-2005", format="%d-%m-%Y"),
                                            to=as.Date("01-12-2015", format="%d-%m-%Y"), by=1),
                                        size=nSequences, replace=TRUE),
-                         "Species"=sample(c("badger", "cow"), size=nSequences, replace=TRUE))
+                         "Species"=sample(c("Badger", "Bovine"), size=nSequences, replace=TRUE))
   
   # Write the data to file
   metadataFile <- file.path(path, "metadata.csv")
@@ -566,14 +566,14 @@ buildXMLFile <- function(sequences, metadata, equalOrVaryingPopSizes, path, date
   
   # Define the deme structure:
   # Demes:
-  #   0 badger
-  #   1 cow
+  #   0 Badger
+  #   1 Bovine
   #
-  #        | badger | cow | 
+  #        | Badger | Bovine | 
   # _______|________|_____|
-  # badger |   0    |  0  |
+  # Badger |   0    |  0  |
   # _______|________|_____|
-  # cow    |   0    |  0  |
+  # Bovine    |   0    |  0  |
   # _______|________|_____|
   migrationRateMatrix <- matrix(c(NA, 1,
                                   1, NA),

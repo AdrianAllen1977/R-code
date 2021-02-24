@@ -29,6 +29,7 @@ Model Substitution_rate  HPD_lower  HPD_upper
 x1<-as.data.frame(x)
 
 ### Plot the graph
-ggplot(x1, aes(x=Model, y=Substitution_rate)) 
-+ geom_point(size=4) 
-+ geom_errorbar(aes(ymax=HPD_upper, ymin=HPD_lower))
+ggplot(x1, aes(x=Model, y=Transition_rate)) +
+geom_point(size=4) +
+geom_errorbar(aes(ymax=HPD_upper, ymin=HPD_lower))
+

@@ -33,3 +33,7 @@ dates[index] <- strsplit(names[index], split="_")[[1]][3]
 
 ## Write the dates vector to a txt file
 write.table(dates, "Dates.txt", row.names=F, col.names=F, quote=F)
+
+## Changing column names in a dataframe
+
+colnames(dataframe)<-c("Name1", "Name2", "Name3")

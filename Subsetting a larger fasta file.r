@@ -20,6 +20,7 @@ library(seqinr)
 genomes<-read.fasta("TVR_Red_Dog_Trim1.fasta", seqtype="DNA", as.string=TRUE)
 
 ###Now import the subset list file with sequence names
+## The subset list must also be in alphanumeric order
 
 subsetlist<-read.table("Badger_Subset_IDs.txt", header=T)
 
