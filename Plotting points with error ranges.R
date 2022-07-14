@@ -25,11 +25,19 @@ Model Substitution_rate  HPD_lower  HPD_upper
 13     TR9        0.04279255 0.02638686 0.06315010
 14    TR10        0.04134458 0.02421569 0.06200827
 
-### Save the table as a data frame
+### If some of your x labels are numeric, you want them to be factors or they won't plot - plus youcan order them like so
+x$Model<-factor(x$Model, levels= c("2014", "2015", "2016"))
+
+## Save the table as a data frame
 x1<-as.data.frame(x)
 
 ### Plot the graph
-ggplot(x1, aes(x=Model, y=Transition_rate)) +
+a<-ggplot(x1, aes(x=Model, y=Substitution_rate)) +
 geom_point(size=4) +
-geom_errorbar(aes(ymax=HPD_upper, ymin=HPD_lower))
+geom_errorbar(aes(ymax=HPD_upper, ymin=HPD_lower)) +
+  xlab("BEAST model") +
+  ylab("Substitution Rate")
+
+### To make your x labels vertical for space reasons, you can if needed do the following:
+a+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 

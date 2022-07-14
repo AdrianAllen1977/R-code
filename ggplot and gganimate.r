@@ -7,6 +7,7 @@ library("sp")
 library("raster")
 library("ggthemes")
 library("gifski")
+library("ggsn")
 
 ## Import the file of points you want to work with.
 
@@ -39,6 +40,13 @@ geom_polygon(data=TVRbuff2, aes(x=long, y=lat, group = group), colour="black", f
 geom_polygon(data=TVRzone2, aes(x=long, y=lat, group = group), colour="black", fill="white") +
 geom_point(colour="blue") +
 theme_map()
+
+
+## Adding scale bars and compass points to your map can be done with the package ggsn
+
+ggsn::scalebar(location="bottomright", dist_unit="km", dist=100, y.min=51.5, y.max=52, x.min=-8, x.max=-6 , transform=T, model="WGS84", st.bottom=T, st.dist=2, st.size=0.5)
+
+map2<-map1+ ggsn::north2(map2, x=0.1, y=0.9, scale =0.1, symbol=1)
 
 ### Making an animated version
 

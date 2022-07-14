@@ -1,0 +1,1 @@
+********************************************************** 95% Confidence INterval from a vector ***********************************************************************ci95<- function(x) {    t.value <- qt(0.975, length(x)-1)    standard.dev <- sd(x)    ci <- t.value*standard.dev    cat ("95% Confidence Interval = ", mean(x) -ci, "to", mean(x) +ci, "\n") }
