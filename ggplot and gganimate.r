@@ -8,6 +8,7 @@ library("raster")
 library("ggthemes")
 library("gifski")
 library("ggsn")
+library("dplyr")
 
 ## Import the file of points you want to work with.
 
@@ -56,4 +57,48 @@ anim<-map1+transition_manual(frames = Year, cumulative=T)+labs(title="Year: {cur
 ### the deafult on this function saves the last animation made.
 
 anim_save("Clade1.gif")
+
+################################################################
+#############################
+## Density plots in ggplot ##
+#############################
+
+## Kernel density plots with ggplot
+
+## import file / dataframe with geolocation as before
+x<-read.table("TVR_endemic_clade_12SNPMax_cluster.txt", header=T)
+
+## If you have mulltiple levels / clusters of samples to plot, split them up using filter in dplyr
+c1<-x %>% filter(ClusterNumber==1)
+c2<-x %>% filter(ClusterNumber==2)
+
+# etc
+
+## Then plot the base map with the polygon layers you want.
+## First read in the map layers
+TVRzone<-readOGR(dsn=".", layer="TVR")
+TVRzone2<-fortify(TVRzone)
+
+## Then plot the base map
+map1<-ggplot(data=x, aes(x=X, y=Y)) +
+geom_polygon(data=TVRzone2, aes(x=long, y=lat, group = group), colour="black", fill="white") +
+theme_map()
+
+## Now you can add in the density plots of the location data
+
+map1 + geom_density_2d(data=c1, color="red")
+
+### Alternatively, you can determine the heat map density plot
+
+map1 + geom_density2d_filled(data=c1, contour_var = "ndensity", bins=8)
+
+### The heat map is a full polygon which can obscure the other map features, so rejig the plot
+
+map2<- ggplot(data=x, aes(x=X, y=Y)) +
+  geom_density2d_filled(data=c1, contour_var = "ndensity", bins=8) +
+  geom_polygon(data=TVRzone2, aes(x=long, y=lat, group = group), colour="red", fill=NA) +
+  geom_point(data=c1, color="red") +
+  theme_map()
+    
+
 

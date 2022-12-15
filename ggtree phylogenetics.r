@@ -30,7 +30,7 @@ tree$edge.length<-tree$edge.length*L
 
 ### Determine node numbers so you can highlight clades and root the tree etc
 
-ggtree(tree) + geom_tippoint() + geom_text(aes(label=node))
+ggtree(tree) + geom_tippoint() + geom_text(aes(label=node), size=1)
 
 ### Root tree to specific out-group sequence
 # Set the isolate to root the tree on - can also use node
@@ -101,7 +101,7 @@ tree$edge.length<-tree$edge.length*L
 
 ### Determine node numbers so you can highlight clades and root the tree etc
 
-ggtree(tree) + geom_tippoint() + geom_text(aes(label=node))
+ggtree(tree) + geom_tippoint() + geom_text(size=0.5, aes(label=node), col="blue")
 
 ### Root tree to specific out-group sequence
 # Set the isolate to root the tree on - can also use node
@@ -121,6 +121,9 @@ rootedTree_noRef <- drop.tip(rootedTree, tip="Ref")
 ## Plot the tree in ggtree
 p<-ggtree(rootedTree_noRef)
 
+### you can also do a circular tree if you want to save space
+#p<-ggtree(rootedTree_noRef, layout='circular')
+
 ## Extract tip names
 
 labels<-rootedTree_noRef$tip.label
@@ -133,10 +136,10 @@ metadata_labels<-c()
 for(index in 1:length(labels)){metadata_labels[index] <-strsplit(labels[index], split="_")}
 
 ### Make the vector into a matrix with columns - make sure no of columns is right!
-metadata_labels2<-matrix(unlist(metadata_labels), ncol=3, byrow=TRUE)
+metadata_labels2<-matrix(unlist(metadata_labels), ncol=7, byrow=TRUE)
 
 ### Write the data extracted to a tab delimited text file
-write.table(metadata_labels2, "meta_data.txt", quote=F, sep="\t", col.names = F, row.names = F)
+write.table(metadata_labels2, "meta_data.txt", quote=F, sep="\t", col.names = c("organism", "survey", "ID", "host", "year", "geno", "country"), row.names = F)
 
 ## Import the metadata as a dataframe
 
@@ -169,9 +172,11 @@ p4<-p3 +  new_scale_fill() + geom_fruit(geom=geom_tile, mapping=aes(fill=country
 ### And we can add additional ones as required.
 ### For a classifer that has a numeric value, but you wish it to be used categorically, you need to specify in the dataframe that it is a factor - see above.
 
-p5<-p4 + new_scale_fill() +geom_fruit(geom=geom_tile, mapping=aes(fill=spol), width=5) + scale_fill_manual(name="Spoligotype", values=c("red", "orange", "yellow", "darkgreen", "darkblue", "purple", "turquoise", "brown", "black"), guide=guide_legend(keywidth=0.3, keyheight=0.3))
+p5<-p4 + new_scale_fill() +geom_fruit(geom=geom_tile, mapping=aes(fill=spol), width=5) + scale_fill_manual(name="Spoligotype", values=c("red", "orange", "yellow", "green", "cyan", "darkgreen", "blue", "darkblue", "purple", "violet", "black"), guide=guide_legend(keywidth=0.3, keyheight=0.3))
 
 ## Add a scale bar
 
 p5 + geom_treescale(x=10, y=150, width=100, offset=5, color="red", linesize=0.5)
 
+### If tree is outside of plotting limits, use ggsave to adjust and save a PDF
+ggsave("infantisplot.pdf", width=50, height=20, units="cm", limitsize =FALSE)

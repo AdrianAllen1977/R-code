@@ -41,3 +41,14 @@ geom_errorbar(aes(ymax=HPD_upper, ymin=HPD_lower)) +
 ### To make your x labels vertical for space reasons, you can if needed do the following:
 a+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
+########################
+
+## You can also make horizontal charts to display confidence intervals
+
+a<-ggplot(x1, aes(x=PRED, y=Genotype)) + 
+  geom_errorbarh(aes(xmin=LCI, xmax=UCI), color="darkslategray4") + ## If horizontal display you variable of interest is on X axis
+  geom_point(size=1, color="orange") + 
+  geom_vline(xintercept=0.7939, linetype=2, color="gray50") + ### Add a central line - maybe an average of the whole dataset
+  ylab("VNTR Genotype") + 
+  xlab("Prob. being a reactor") + 
+  theme_classic()

@@ -3,6 +3,10 @@
 #All rights reserved. (see README.txt for more details)
 #'''
 
+##############
+## FUNCTION ##
+##############
+
 getRecombHeatmap<-function(snps,ref,w=NULL,g=NULL,offset=0) {
 
 # remove offset
@@ -160,3 +164,22 @@ counts<-c(counts,snpcount)
 names(counts)<-colnames(snps)[2:ncol(snps)]
 return(counts)
 }
+
+################
+#### SCRIPT ####
+################
+
+## Import the csv file which details where snps are found in the RedDog or parseSNP run you have completed.
+
+alleles <- read.csv("S_infantis_CP016408_alleles_var_cons1.0_var_regionFiltered.csv", header=T)
+
+## Check for distribution of SNPs in the reference between the chosen outgroup and another sample
+
+x<- getRecombBetweenStrains(alleles, "C22_6885", "C20_15367", w=1000, multiplier=1, plotResult = T)
+
+## Print the locations for the dense SNP clusters
+
+c<-data.frame(x$block[,1], x$block[,2])
+
+write.table(c, file="recomb.csv", row.names=FALSE, na="", col.names=FALSE, sep=",")
+
