@@ -26,7 +26,7 @@ Irish_CRS  <- CRS("+proj=tmerc +lat_0=53.5 +lon_0=-8 +k=1.000035 +x_0=200000 +y_
 data <- read.csv("Badger coords.csv")
 ## Change this to a "spatial points" object 
 data_sp <- data
-coordinates(data_sp) <- cbind(data$X, data$Y)  ## (assumes location columns are labelled "X" and "Y")
+coordinates(data_sp) <- cbind(data$x, data$y)  ## (assumes location columns are labelled "X" and "Y")
 ## Tell it that the locations are as Irish grid references
 proj4string(data_sp) <- Irish_CRS
 

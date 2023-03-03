@@ -159,12 +159,12 @@ writeOGR(cl1_mcp, dsn = "mcp_clade1", driver="ESRI Shapefile", layer="homerange_
 
 ### adehabitatHR outputs home range areas in hectares
 
-## To convert to km^2 for any GIS shapefile, use the folowing script.
+## To convert to km^2 for any GIS shapefile, use the following script.
 
 library(raster)
 x<-shapefile("yourfile.shp")
 crs(x)
-x$area_sqkm <- area(x) / 1000000
+x$area_sqkm <- x$area / 100
 
 ### Simply run the following query to get the figure
 x$area_sqkm
