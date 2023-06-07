@@ -49,7 +49,8 @@ x$y<-as.numeric(x$y)
 # Filter sequences by cluster number
 c5<-x %>% filter(cluster==5)
 
-## Before you do any plotting - make sure you use the right kernel smoothing function h
+## ONLY DO THE BELOW IF YOU HAVE LOTS OF DATA POINTS - IF SMALL NUMBER USE DEFAULT h value
+### Before you do any plotting - make sure you use the right kernel smoothing function h
 ## KDE estimators in R default to Gaussian methods - if you use these, they will oversmooth distributions that are not normally distributed, missing features of data
 ## Distribution of molecular types is likely not to be Gausssian.
 ## SO - use a non-parametric h smoothing function.
@@ -68,8 +69,8 @@ bw.SJ(b)
 # Base map first
 map1<-ggplot(data=c5, aes(x=lon, y=lat)) +
   geom_polygon(data=NI2, aes(x=long, y=lat, group = group), colour="black", fill="white") +
-  geom_hdr(data=c5, aes(x=lon, y=lat), method="kde", probs=c(0.95, 0.50), h=??, fill="blue") + ## add density KDE layer of c5 points
-  geom_point(data=c5, aes(x=lon, y=lat), color="red", size=0.3) + ## add c5 points
+  geom_hdr(data=c5, aes(x=lon, y=lat), method="kde", probs=c(0.95, 0.50), fill="blue") + ## add density KDE layer of c5 points
+  geom_point(data=c5, aes(x=lon, y=lat), color="black", size=1) + ## add c5 points
   theme_map()
 
 # geom_hdr is a more useful way of visualising the 50% etc KDE of points.  You can set different probabilities.
@@ -79,7 +80,7 @@ map1<-ggplot(data=c5, aes(x=lon, y=lat)) +
 # map2<-map1 + geom_density2d_filled(data=c13, contour_var = "ndensity", bins=8, alpha=0.2, aes(x=x, y=y))
 
 # Add scalebar
-map2<-map1+ ggsn::scalebar( dist_unit="km", dist=20, x.min=-10, x.max=-8, y.min=55, y.max=55.5, transform=T, model="WGS84", st.bottom=T, st.dist=0.1, st.size=2)
+map2<-map1+ ggsn::scalebar( dist_unit="km", dist=20, x.min=-10, x.max=-8, y.min=55, y.max=55.5, transform=T, model="WGS84", st.bottom=T, st.dist=0.1, st.size=5)
 
 # Add compass point
 map3<-map2 + ggsn::north2(map2, x=0.1, y=0.9, scale=0.2)
@@ -175,7 +176,7 @@ map5<-map4+ ggsn::scalebar( dist_unit="km", dist=20, x.min=-10, x.max=-8, y.min=
 map6<-map5 + ggsn::north2(map5, x=0.1, y=0.9, scale=0.2)
 
 # Remake the map of just the KDE layers and don't plot it.
-MLVA_map<-ggplot() + geom_hdr(data=y, aes(x=lon, y=lat))
+MLVA_map<-ggplot() + geom_hdr(data=y, aes(x=lon, y=lat), method="kde", probs=c(0.95, 0.50), h=0.117, fill="blue")
 
 # Extract the layer data using the command below
 data2<-layer_data(MLVA_map, i=1)
@@ -231,7 +232,7 @@ ggplot() + geom_hdr(data=y, aes(x=lon, y=lat)) +
 
 ## Write polygons as shape files.
 
-st_write(polygon_1, "MLVA_1.140_50%KDE_western.shp")
+st_write(polygon_1, "MLVA_1.140_50%KDE_western1.shp")
 st_write(polygon_2, "MLVA_1.140_50%KDE_eastern.shp")
 st_write(polygon_3, "MLVA_1.140_50%KDE_southern.shp")
 

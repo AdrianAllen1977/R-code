@@ -38,6 +38,14 @@ geom_errorbar(aes(ymax=HPD_upper, ymin=HPD_lower)) +
   xlab("BEAST model") +
   ylab("Substitution Rate")
 
+## If you need to make discrete label changes o remove underscores etc
+
+a2<- a + scale_x_discrete(labels=c("yourname1", "yourname2"))
+
+## If you wish to upsacle the font size for the whole graph, do so with base size
+
+a3<-a2+ theme_grey(base_size = 12) ## default size is 11
+
 ### To make your x labels vertical for space reasons, you can if needed do the following:
 a+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
