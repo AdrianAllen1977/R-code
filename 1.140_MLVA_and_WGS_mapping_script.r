@@ -26,7 +26,7 @@ setwd("Desktop/1.140_paper/")
 
 
 # Read in NI map layer
-NI<-readOGR(dsn=".", layer="NI_Outline") ## This layer uses the generla GPS WGS84 GRID!
+NI<-readOGR(dsn=".", layer="NI_Outline") ## This layer uses the generala GPS WGS84 GRID!
 
 # Convert layer to dataframe
 NI2<-fortify(NI)
@@ -80,7 +80,7 @@ map1<-ggplot(data=c5, aes(x=lon, y=lat)) +
 # map2<-map1 + geom_density2d_filled(data=c13, contour_var = "ndensity", bins=8, alpha=0.2, aes(x=x, y=y))
 
 # Add scalebar
-map2<-map1+ ggsn::scalebar( dist_unit="km", dist=20, x.min=-10, x.max=-8, y.min=55, y.max=55.5, transform=T, model="WGS84", st.bottom=T, st.dist=0.1, st.size=5)
+map2<-map1+ ggsn::scalebar( dist_unit="km", dist=20, x.min=-10, x.max=-8, y.min=55, y.max=55.5, transform=T, model="WGS84", st.bottom=T, st.dist=0.1, st.size=4) + theme_map()
 
 # Add compass point
 map3<-map2 + ggsn::north2(map2, x=0.1, y=0.9, scale=0.2)
@@ -90,7 +90,8 @@ map3<-map2 + ggsn::north2(map2, x=0.1, y=0.9, scale=0.2)
 #######################################
 
 # Remake the map of just the KDE layers and don't plot it.
-map<-ggplot() + geom_hdr(data=c5, aes(x=lon, y=lat))
+## SET SCALE LIMITS OR ELSE EXPORT OF SHAPE FILES WILL BE TRUNCATED
+map<-ggplot() + geom_hdr(data=c5, aes(x=lon, y=lat)) + scale_x_continuous(limits = c(-6.5, -5.0)) + scale_y_continuous(limits = c (54, 55.5))
 
 
 # Extract the layer data using the command below
