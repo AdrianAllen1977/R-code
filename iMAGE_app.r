@@ -21,6 +21,30 @@ location_data$Lon<-as.numeric(location_data$Lon)
 ui <- fluidPage(
   shinyjs::useShinyjs(),
   tabsetPanel(
+    ## Tab for the title page
+    tabPanel("i-MAGE",
+             titlePanel("i-MAGE: Interactive MycobActerium bovis Genome Epidemiology"),
+             mainPanel(
+               img(src="logo.png", align="centre", width="95%"), ## Your image must be in a subfolder called 'www' or else it won't display
+             )
+    ),
+    
+    ## Tab for instructions page
+    tabPanel("User guide",
+             titlePanel("Instructions"),
+             mainPanel(p("i-MAGE is a genome epidemiological tool for helping trace sources of bovine TB infection."),
+                       p("1. First, go to the Map screen, key in or select from the drop down box the name of the M. bovis isolate you wish to compare to the rest of the dataset."),
+                       p("2. Then, use the slider to select the maximum number of SNP differences you want to set to find related M. bovis isolates."),
+                       p("3. The lower the number of SNPs different, the more related isolates are."),
+                       p("4. There is no 'right' cutoff to find related isolates, but using a cutoff of 5 or lower can find isolates likely linked by recent transmission."),
+                       p("5. The map will display the lcoations of linked isolates"),
+                       p("6. Then, go to the 'Followup Investigation' tab where the closest relatives of your isolate will be listed, and the herd in which they have been found."),
+                       p("7. If some of the closest isolates are form wildlife sources, there will be no herd ID entry"),
+                       strong("CAVEAT! M. bovis does no mutate very frequently, so in outbreak areas there may be little diversity - a close match to another herd does NOT necessarily mean that is where infection came from, indeed many isolates could have a similar level of relatedness or be identical to the one you are interested in. Or the true source may not have been sampled, while others nearby have. BUT, given how the pathogen clusters in the landscape, the geographic location of related isolates can give you a clue as to where infection may have come from."),
+                       p("In your outbreak investigations, check for animal movement data which link your isolate back to the area where the most closely related isolates are found."),
+                       p("Search land parcel data to assess if the animal your isolate was found in may have been in a contiguous herd location next to a herd with a closely related isolate.")
+             )),
+    
     # Tab for the map
     tabPanel("Map",
              titlePanel("i-MAGE: Interactive MycobActerium bovis Genome Epidemiology"),
