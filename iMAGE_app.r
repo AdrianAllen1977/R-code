@@ -37,7 +37,7 @@ ui <- fluidPage(
                        p("2. Then, use the slider to select the maximum number of SNP differences you want to set to find related M. bovis isolates."),
                        p("3. The lower the number of SNPs different, the more related isolates are."),
                        p("4. There is no 'right' cutoff to find related isolates, but using a cutoff of 5 or lower can find isolates more likely to be linked by recent transmission."),
-                       p("5. The map will display the locations of linked isolates."),
+                       p("5. The map will display the locations of linked isolates. Zoom in to see how clusters breakdown, and hover over the location points to see the sample ID details."),
                        p("6. Then, go to the 'Follow up Investigation' tab where the closest relatives of your isolate will be listed, and the herd in which they have been found."),
                        p("7. The format of the isolate name will tell you the host species (bov=bovine, bad=badger) and the year of isolation"),
                        p("8. If some of the closest isolates are form wildlife sources, there will be no herd ID entry"),
