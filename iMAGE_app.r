@@ -48,7 +48,7 @@ ui <- fluidPage(
     
     # Tab for the map
     tabPanel("Map",
-             titlePanel("i-MAGE: Interactive MycobActerium bovis Genome Epidemiology"),
+             titlePanel("i-MAGE: Genetic relatedness search tool"),
              mainPanel(
                selectInput("sample", "Select Sample Name:", choices = colnames(snp_distance_matrix)),
                sliderInput("snp_distance_threshold", "Select SNP Distance Threshold - samples differ by x SNPs or fewer:", min = 0, max = 50, value = 5),
@@ -57,7 +57,7 @@ ui <- fluidPage(
     ),
     # Tab for the derived information
     tabPanel("Follow up investigation",
-             titlePanel("Check movement data to these locations"),
+             titlePanel("Check movement & land parcel data for these locations"),
              mainPanel(
                # Add UI elements for displaying information derived from other_samples
                dataTableOutput("derived_table")
