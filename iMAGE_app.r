@@ -4,17 +4,25 @@ library(leaflet)
 library(shinyjs)
 library(dplyr)
 library(DT)
+library(ape)
 
-### Import distance metric and location data files.
+### Import distance matrix, phylogeny and location data files.
 
 snp_distance_matrix <- read.csv("snp_distance_matrix.csv", header = TRUE, stringsAsFactors = FALSE)
 
 location_data <- read.csv("location_data.csv", header = TRUE,  stringsAsFactors = FALSE)
 
+tree<-read.tree("All_bovis.tree")
+
 
 ## Make sure Lat and Lon data are numeric
 location_data$Lat<-as.numeric(location_data$Lat)
 location_data$Lon<-as.numeric(location_data$Lon)
+
+
+## Fix any polytomies in the tree so that there are more nodes than tips or else the display of the sub tree phylogeny won't work
+tree <- multi2di(tree)
+
 
 #### Set up the user interface (ui) for the shiny app
 
@@ -25,7 +33,7 @@ ui <- fluidPage(
     tabPanel("i-MAGE",
              titlePanel("i-MAGE: Interactive MycobActerium bovis Genome Epidemiology"),
              mainPanel(
-               img(src="logo.png", align="centre", width="95%"), ## Your image must be in a subfolder called 'www' or else it won't display
+               img(src="iMage_logo.png", align="centre", width="150%"), ## Your image must be in a subfolder called 'www' or else it won't display
              )
     ),
     
@@ -38,10 +46,15 @@ ui <- fluidPage(
                        p("3. The lower the number of SNPs different, the more related isolates are."),
                        p("4. There is no 'right' cutoff to find related isolates, but using a cutoff of 5 or lower can find isolates more likely to be linked by recent transmission."),
                        p("5. The map will display the locations of linked isolates. Zoom in to see how clusters breakdown, and hover over the location points to see the sample ID details."),
-                       p("6. Then, go to the 'Follow up Investigation' tab where the closest relatives of your isolate will be listed, and the herd in which they have been found."),
-                       p("7. The format of the isolate name will tell you the host species (bov=bovine, bad=badger) and the year of isolation"),
-                       p("8. If some of the closest isolates are form wildlife sources, there will be no herd ID entry"),
-                       strong("CAVEAT! M. bovis does not mutate very frequently, so in outbreak areas there may be little diversity - a close match to another herd does NOT necessarily mean that is where infection came from, indeed many isolates could have a similar level of relatedness or be identical to the one you are interested in. Or the true source may not have been sampled, while others nearby have. BUT, given how the pathogen clusters in the landscape, the geographic location of related isolates can give you a clue as to where infection may have come from."),
+                       p("6. You can then go to the Phylogeny tab, to view the chosen sample, highlighted in red, in the context of the closest relatives defined by the chosen SNP distance"),
+                       p("7. If the SNP threshold is set too high, it will pull in so many samples that the phylogeny resolution is poor - use the slider to adjust accordingly"),
+                       p("8. Then, go to the 'Follow up Investigation' tab where the closest relatives of your isolate will be listed, and the herd in which they have been found."),
+                       p("9. The format of the isolate name will tell you the host species (bov=bovine, bad=badger) and the year of isolation"),
+                       p("10. If some of the closest isolates are from wildlife sources, there will be no herd ID entry"),
+                       p(strong("CAVEAT! M. bovis does not mutate very frequently, so in outbreak areas there may be little diversity.")),
+                       p(strong("A close match to another herd does NOT necessarily mean that is where infection came from, indeed many isolates could have a similar level of relatedness or be identical to the one you are interested in.")),
+                       p(strong("OR the true source may not have been sampled, while others nearby have.")),
+                       p(strong("BUT, given how the pathogen clusters in the landscape, the geographic location of related isolates can give you a clue as to where infection may have come from.")),
                        p(code("In your outbreak investigations, check for animal movement data which link your isolate back to the area where the most closely related isolates are found.")),
                        p(code("Search land parcel data to assess if the animal your isolate was found in may have been in a contiguous herd location next to a herd with a closely related isolate."))
              )),
@@ -51,10 +64,22 @@ ui <- fluidPage(
              titlePanel("i-MAGE: Genetic relatedness search tool"),
              mainPanel(
                selectInput("sample", "Select Sample Name:", choices = colnames(snp_distance_matrix)),
-               sliderInput("snp_distance_threshold", "Select SNP Distance Threshold - samples differ by x SNPs or fewer:", min = 0, max = 50, value = 5),
+               sliderInput("snp_distance_threshold", "Select SNP Distance Threshold - samples differ by x SNPs or fewer:", min = 0, max = 50, value = 25),
                leafletOutput("map")
              )
     ),
+    
+    
+    # Tab for the phylogeny 
+    
+    tabPanel("Phylogeny",
+             titlePanel("Phylogenetic context of selected sample"),
+             mainPanel(
+               plotOutput("phylogeny_plot", height = "2500px", width = "100%")  # Adjust height and width as needed)
+             )
+    ),
+    
+    
     # Tab for the derived information
     tabPanel("Follow up investigation",
              titlePanel("Check movement & land parcel data for these locations"),
@@ -70,6 +95,8 @@ ui <- fluidPage(
 ### Set the server up to run the scripts that make your app tick.
 
 server <- function(input, output) {
+  
+
   
   # First filter the SNP distance matrix by the column name for your chosen sample and the chosen SNP distance
   
@@ -118,10 +145,40 @@ filtered_matrix()[,1]
         clusterOptions = markerClusterOptions()  # Optional: Add marker clustering
       )
   })
+  
+  
+  ## Render the phylogeny of samples from the tree within the snp cutoff
+  
+  output$phylogeny_plot <- renderPlot({
+ # Extract a subtree containing samples within the specified SNP threshold
+    subtree_samples <- other_samples()  # Extract the relevant sample names
+    subtree <- keep.tip(tree, subtree_samples)
+    
+    
+    # Create a vector of colors based on whether each tip label matches the selected sample
+    tip_colors <- ifelse(subtree$tip.label == input$sample, "red", "black")
+    
+    # Calculate an appropriate height for the plot based on the number of samples
+    # Adjust this logic to suit your preferences
+    num_samples <- length(subtree$tip.label)
+    
+    if (num_samples > 100) {
+      plot_height <- 100 + 50 * num_samples  # Adjust multiplier for samples over 100
+    } else {
+      plot_height <-  num_samples  # Adjust multiplier for samples below or equal to 100
+    }
+    
+    
+    
+    # Plot the subtree with the adjusted height
+    plot(subtree, type = "phylogram", cex = 1.3, tip.color = tip_colors, height = plot_height)
+  })
+  
+  
 
-  # Render the derived information on the second page/tab
+  # Render the derived information on the fourth page/tab
   output$derived_table <- renderDataTable({
-    selected_data <-other_sample_locs()[,c(1,4)]
+    selected_data <-other_sample_locs()[,c(1,4,5,6)]
     datatable(selected_data)
   })
   
