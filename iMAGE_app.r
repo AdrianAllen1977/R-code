@@ -34,7 +34,8 @@ ui <- fluidPage(
              titlePanel("i-MAGE: Interactive MycobActerium bovis Genome Epidemiology"),
              mainPanel(
                img(src="iMage_logo.png", align="centre", width="150%"), ## Your image must be in a subfolder called 'www' or else it won't display
-               img(src="AFBI_EMbI_logo.png", align="right", width="50%")
+               img(src="AFBI_EMbI_logo.png", align="right", width="50%"),
+               img(src="sigil.png", align="left", width="3%")
                )
     ),
     
@@ -103,7 +104,7 @@ ui <- fluidPage(
               mainPanel(p(strong("i-MAGE is a product of the AgriFood and Biosciences Institute (AFBI) Epidemiology, Molecular Biology and Immunology (EMbI) R&D cluster.")),
                         p("Team members who wrote the application, generate and curate the data that drive it are:"),
                         p(strong("TB molecular biology and genomics")),
-                        p("Adrian Allen, Eleanor Presho, Carl McCormick, Robin Skuce, Ryan Devaney & Purnika Ranasinghe"), 
+                        p("Adrian Allen, Eleanor Presho, Carl McCormick, Robin Skuce, Ryan Devaney, Tara Ardis & Purnika Ranasinghe"), 
                         p(strong("TB culture and diagnostics")),
                         p("Tom Ford & Suzan Thompson."),
                         p("i-MAGE is funded by the Department of Agriculture, Environment and Rural Affairs (DAERA) for Northern Ireland."),
