@@ -34,22 +34,26 @@ ui <- fluidPage(
              titlePanel("i-MAGE: Interactive MycobActerium bovis Genome Epidemiology"),
              mainPanel(
                img(src="iMage_logo.png", align="centre", width="150%"), ## Your image must be in a subfolder called 'www' or else it won't display
-             )
+               img(src="AFBI_EMbI_logo.png", align="right", width="50%")
+               )
     ),
     
     ## Tab for instructions page
     tabPanel("User guide",
              titlePanel("Instructions"),
-             mainPanel(code("i-MAGE is a genome epidemiological tool for helping trace sources of bovine TB infection."),
+             mainPanel(code(strong("i-MAGE is a genome epidemiological tool for helping trace sources of bovine TB (bTB) infection.")),
+                       p(strong("The 'Map' Tab")),
                        p("1. First, go to the Map screen, key in or select from the drop down box the name of the M. bovis isolate you wish to compare to the rest of the dataset."),
                        p("2. Then, use the slider to select the maximum number of SNP differences you want to set to find related M. bovis isolates."),
                        p("3. The lower the number of SNPs different, the more related isolates are."),
                        p("4. There is no 'right' cutoff to find related isolates, but using a cutoff of 5 or lower can find isolates more likely to be linked by recent transmission."),
                        p("5. The map will display the locations of linked isolates. Zoom in to see how clusters breakdown, and hover over the location points to see the sample ID details."),
-                       p("6. You can then go to the Phylogeny tab, to view the chosen sample, highlighted in red, in the context of the closest relatives defined by the chosen SNP distance"),
+                       p(strong("The 'Phylogeny' Tab")),
+                       p("6. You can then go to the Phylogeny tab, to view the highlighted chosen sample's phylogenetic relationship to the closest relatives defined by the chosen SNP distance from the Map tab."),
                        p("7. If the SNP threshold is high, it may pull in so many samples that the phylogeny plot resolution is poor."),
                        p("8. Use the slider to dynamically adjust the height of the phylogeny plot accordingly."),
-                       p("9. Then, go to the 'Follow up Investigation' tab where the closest relatives of your isolate will be listed, and the herd in which they have been found."),
+                       p(strong("The 'Follow Up Investigation' Tab")),
+                       p("9. Then, go to the 'Follow Up Investigation' tab where the closest relatives of your isolate will be listed, and the herd in which they have been found."),
                        p("10. The format of the isolate name will tell you the host species (bov=bovine, bad=badger) and the year of isolation"),
                        p("11. If some of the closest isolates are from wildlife sources, there will be no herd ID entry"),
                        p(strong("CAVEAT! M. bovis does not mutate very frequently, so in outbreak areas there may be little diversity.")),
@@ -58,7 +62,9 @@ ui <- fluidPage(
                        p(strong("BUT, given how the pathogen clusters in the landscape, the geographic location of related isolates can give you a clue as to where infection may have come from.")),
                        p(code("In your outbreak investigations, check for animal movement data which link your isolate back to the area where the most closely related isolates are found.")),
                        p(code("Search land parcel data to assess if the animal your isolate was found in may have been in a contiguous herd location next to a herd with a closely related isolate."))
-             )),
+            
+             )
+           ),
     
     # Tab for the map
     tabPanel("Map",
@@ -74,7 +80,7 @@ ui <- fluidPage(
     # Tab for the phylogeny 
     
     tabPanel("Phylogeny",
-             titlePanel("Phylogenetic context of selected sample"),
+             titlePanel("Phylogenetic context of selected sample: selected SNP cut off relatives displayed"),
              mainPanel(
                 sliderInput("phylogeny_height", "Adjust Phylogeny Resolution (height of plot in pixels):", min = 200, max = 5000, value = 2000),
                 plotOutput("phylogeny_plot")
@@ -83,15 +89,30 @@ ui <- fluidPage(
     
     
     # Tab for the derived information
-    tabPanel("Follow up investigation",
+    tabPanel("Follow Up Investigation",
              titlePanel("Check movement & land parcel data for these locations"),
              mainPanel(
                # Add UI elements for displaying information derived from other_samples
                dataTableOutput("derived_table")
              )
-    )
-  )
-)
+    ),
+    
+    ## Tab for the acknowledgements panel
+    tabPanel("Acknowledgements", 
+             titlePanel("i-MAGE development and curation"),
+              mainPanel(p(strong("i-MAGE is a product of the AgriFood and Biosciences Institute (AFBI) Epidemiology, Molecular Biology and Immunology (EMbI) R&D cluster.")),
+                        p("Team members who wrote the application, generate and curate the data that drive it are:"),
+                        p(strong("TB molecular biology and genomics")),
+                        p("Adrian Allen, Eleanor Presho, Carl McCormick, Robin Skuce, Ryan Devaney & Purnika Ranasinghe"), 
+                        p(strong("TB culture and diagnostics")),
+                        p("Tom Ford & Suzan Thompson."),
+                        p("i-MAGE is funded by the Department of Agriculture, Environment and Rural Affairs (DAERA) for Northern Ireland."),
+                        img(src="AFBI_EMbI_logo.png", align="centre", width="70%"),
+                        img(src="DAERA_logo.png", align="centre", width="70%")
+                        )
+                    )               
+                  )
+                )
 
 
 ### Set the server up to run the scripts that make your app tick.
