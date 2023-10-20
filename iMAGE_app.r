@@ -47,10 +47,11 @@ ui <- fluidPage(
                        p("4. There is no 'right' cutoff to find related isolates, but using a cutoff of 5 or lower can find isolates more likely to be linked by recent transmission."),
                        p("5. The map will display the locations of linked isolates. Zoom in to see how clusters breakdown, and hover over the location points to see the sample ID details."),
                        p("6. You can then go to the Phylogeny tab, to view the chosen sample, highlighted in red, in the context of the closest relatives defined by the chosen SNP distance"),
-                       p("7. If the SNP threshold is set too high, it will pull in so many samples that the phylogeny resolution is poor - use the slider to adjust accordingly"),
-                       p("8. Then, go to the 'Follow up Investigation' tab where the closest relatives of your isolate will be listed, and the herd in which they have been found."),
-                       p("9. The format of the isolate name will tell you the host species (bov=bovine, bad=badger) and the year of isolation"),
-                       p("10. If some of the closest isolates are from wildlife sources, there will be no herd ID entry"),
+                       p("7. If the SNP threshold is high, it may pull in so many samples that the phylogeny plot resolution is poor."),
+                       p("8. Use the slider to dynamically adjust the height of the phylogeny plot accordingly."),
+                       p("9. Then, go to the 'Follow up Investigation' tab where the closest relatives of your isolate will be listed, and the herd in which they have been found."),
+                       p("10. The format of the isolate name will tell you the host species (bov=bovine, bad=badger) and the year of isolation"),
+                       p("11. If some of the closest isolates are from wildlife sources, there will be no herd ID entry"),
                        p(strong("CAVEAT! M. bovis does not mutate very frequently, so in outbreak areas there may be little diversity.")),
                        p(strong("A close match to another herd does NOT necessarily mean that is where infection came from, indeed many isolates could have a similar level of relatedness or be identical to the one you are interested in.")),
                        p(strong("OR the true source may not have been sampled, while others nearby have.")),
@@ -75,8 +76,9 @@ ui <- fluidPage(
     tabPanel("Phylogeny",
              titlePanel("Phylogenetic context of selected sample"),
              mainPanel(
-               plotOutput("phylogeny_plot", height = "2500px", width = "100%")  # Adjust height and width as needed)
-             )
+                sliderInput("phylogeny_height", "Adjust Phylogeny Resolution (height of plot in pixels):", min = 200, max = 5000, value = 2000),
+                plotOutput("phylogeny_plot")
+                )
     ),
     
     
@@ -146,36 +148,31 @@ filtered_matrix()[,1]
       )
   })
   
-  
+
+
   ## Render the phylogeny of samples from the tree within the snp cutoff
-  
-  output$phylogeny_plot <- renderPlot({
- # Extract a subtree containing samples within the specified SNP threshold
+  # Create a reactive expression for the phylogeny plot
+  phylogeny_plot <- reactive({
+    phylogeny_height <- input$phylogeny_height  # Get the height from the slider input
+    
     subtree_samples <- other_samples()  # Extract the relevant sample names
     subtree <- keep.tip(tree, subtree_samples)
-    
     
     # Create a vector of colors based on whether each tip label matches the selected sample
     tip_colors <- ifelse(subtree$tip.label == input$sample, "red", "black")
     
-    # Calculate an appropriate height for the plot based on the number of samples
-    # Adjust this logic to suit your preferences
-    num_samples <- length(subtree$tip.label)
-    
-    if (num_samples > 100) {
-      plot_height <- 100 + 50 * num_samples  # Adjust multiplier for samples over 100
-    } else {
-      plot_height <-  num_samples  # Adjust multiplier for samples below or equal to 100
-    }
-    
-    
-    
-    # Plot the subtree with the adjusted height
-    plot(subtree, type = "phylogram", cex = 1.3, tip.color = tip_colors, height = plot_height)
+    # Create the phylogeny plot
+    plot(subtree, type = "phylogram", cex = 1.0, tip.color = tip_colors)
   })
   
-  
-
+  # Render the phylogeny plot
+  output$phylogeny_plot <- renderPlot({
+    phylogeny_plot()
+  }, height = function() {
+    input$phylogeny_height
+  })
+ 
+    
   # Render the derived information on the fourth page/tab
   output$derived_table <- renderDataTable({
     selected_data <-other_sample_locs()[,c(1,4,5,6)]
