@@ -150,6 +150,8 @@ write.tree(phy, file="input.nwk")
 
 tree<-read.tree("input.nwk")
 
+## And alternative is to use read.nexus to import the file as you may not want to open it FigTree and save it as a Newick format.
+
 ## If importing an MCC tree from BEAST - be aware, treeannotator can introduce negative branch lengths.
 ## So a descendant node can appear to be older than its ancestor
 ## This occurs because an MCC tree is the average of multiple trees - and some clades don't appear in all trees.
