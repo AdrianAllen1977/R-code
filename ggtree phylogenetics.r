@@ -30,7 +30,7 @@ tree$edge.length<-tree$edge.length*L
 
 ### Determine node numbers so you can highlight clades and root the tree etc
 
-ggtree(tree) + geom_tippoint() + geom_text(aes(label=node), size=1)
+ggtree(tree) + geom_tippoint() + geom_text(aes(label=node), size=1, col="blue")
 
 ### Root tree to specific out-group sequence
 # Set the isolate to root the tree on - can also use node
@@ -143,7 +143,7 @@ write.table(metadata_labels2, "meta_data.txt", quote=F, sep="\t", col.names = c(
 
 ## Import the metadata as a dataframe
 
-meta_data<-read.table("meta_data.txt", header=T)
+meta_data<-read.table("meta_data.txt", header=T, colClasses=c('character', 'character', 'character', 'character', 'character', 'character', 'character' ))
 
 ### MAKE SURE COLUMN 1 HAS THE FULL TIP NAMES OR ELSE IT WON'T WORK!
 
@@ -176,7 +176,10 @@ p5<-p4 + new_scale_fill() +geom_fruit(geom=geom_tile, mapping=aes(fill=spol), wi
 
 ## Add a scale bar
 
-p5 + geom_treescale(x=10, y=150, width=100, offset=5, color="red", linesize=0.5)
+p6<-p5 + geom_treescale(x=10, y=150, width=100, offset=5, color="red", linesize=0.5)
+
+### Add coloured nodes for bootstraps values above a chosen number
+p7<-p6 + geom_nodepoint(aes(label=label, subset = !is.na(as.numeric(label)) & as.numeric(label) > 70), col="orange", fill="orange", size=0.5)
 
 ### If tree is outside of plotting limits, use ggsave to adjust and save a PDF
 ggsave("infantisplot.pdf", width=50, height=20, units="cm", limitsize =FALSE)
