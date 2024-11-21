@@ -20,7 +20,7 @@ location_data <- read.csv("All_bovis_Aug24_locations.csv", header = TRUE,  strin
 
 tree<-read.tree("All_bovis_Aug24_max_pars.tree")
 
-moves<-read.csv("All_bovis_Aug24_movements.csv")
+moves<-read.csv("All_bovis_Oct24_movements.csv")
 
 # Make branches with lengths of 0 very very small - RaxML trees can appear very different, ie not sitting flat to node, when zoomed in on samples that are identical - feature of substitutions per site being the metric used.
 tree$edge.length[tree$edge.length <= 0] <- 0.000001
@@ -94,7 +94,7 @@ ui <- fluidPage(
                        p(strong("The 'Animal Movement Viewer' tab")),
                        p("21. From the note you took of the host animal ear tag in the herd selection tab, enter the tag number (or even just some portion of it) in the selection box."),
                        p("22. Select the tag number you want from the drop down menu. Compare it to the 'Herd Selection' tab one to make sure it is the same"),
-                       p("23. The movment record for that animal will now appear on the rendered map as a series of points with associated dates and arrows linking moves between properties."),
+                       p("23. The movement record for that animal will now appear on the rendered map as a series of points with associated dates and arrows linking moves between properties."),
                        p("24. The earliest record for an animal will be its birth / registration herd location, and the latest record the herd in which the animal was identified as a reactor at."),
                        p("25. Also included on the map, is the home and core range of the selected genomic relatedness cutoff from the 'Map' tab."),
                        p("26. For genomes that occur outside of home and core ranges, you can see if host animal movement involved movemnt into a home or core range which may have been when the infection event happened."),
@@ -167,7 +167,7 @@ ui <- fluidPage(
     tabPanel("Animal Movement Viewer",
     		titlePanel("Movements of bovine host of selected M. bovis genome"),
     		mainPanel(
-    		  selectInput("tag", "Enter animal tag number:", choices = moves4$Tag_no),
+    		  selectInput("tag", "Enter animal tag-number:", choices = moves4$Tag_no),
     		  plotOutput("shapefile_map2")
     			)
     ),
@@ -351,9 +351,9 @@ output$derived_table <- renderDataTable({
     geom_hdr(data = other_sample_locs(), aes(x = Lon, y = Lat), method="kde", probs=c(0.95, 0.50), fill="#0F1E64") +
     
     # Plot the points with date labels
-    geom_point(data = filtered_moves, aes(x = Lon, y = Lat), color = "blue", size = 3) +
+    geom_point(data = filtered_moves, aes(x = Lon, y = Lat), color = "red", size = 3) +
     
-    geom_text(data = filtered_moves, aes(x = Lon, y = Lat, label = date), size = 4, hjust=-0.2, vjust=-0.2, col="blue") +
+    geom_text(data = filtered_moves, aes(x = Lon, y = Lat, label = date), size = 5, hjust=-0.2, vjust=-0.2, col="red") +
     
     
   # Draw curved lines to indicate movement

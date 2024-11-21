@@ -48,7 +48,5 @@ geom_curve(data = moves4,
   # Set map theme
   theme_map()
   
-  # Set map theme
-  theme_map()
 
   

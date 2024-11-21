@@ -20,7 +20,7 @@ library(Biostrings)
 
 ### Import your .fasta file where the alignments are.
 
-genomes=readDNAStringSet("29Jun17bestsnp.fasta")
+genomes<-readDNAStringSet("29Jun17bestsnp.fasta")
 
 ####Run dist matrix
 

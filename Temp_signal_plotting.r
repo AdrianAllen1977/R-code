@@ -21,11 +21,11 @@ head(a) # Check column and row names for plotting
 
 ## Plots points with linear model line through them
 
-aplot<-ggplot(a, aes(x=date, y=distance)) + 
+aplot<-ggplot(a, aes(x=distance, y=date)) + 
 	geom_point(colour="orange") + 
 	geom_smooth(method=lm) + 
-	ylab("Root to tip dist") + 
-	xlab("Year") + 
+	ylab("Date") + 
+	xlab("Root to tip distance") + 
 	theme_classic()
 	
 ###################################	

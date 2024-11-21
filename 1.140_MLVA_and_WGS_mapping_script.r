@@ -47,7 +47,7 @@ x$x<-as.numeric(x$x)
 x$y<-as.numeric(x$y)
 
 # Filter sequences by cluster number
-c5<-x %>% filter(cluster==5)
+c5<-x %>% filter(ID==1)
 
 ## ONLY DO THE BELOW IF YOU HAVE LOTS OF DATA POINTS - IF SMALL NUMBER USE DEFAULT h value
 ### Before you do any plotting - make sure you use the right kernel smoothing function h
@@ -76,7 +76,7 @@ map1<-ggplot(data=c5, aes(x=lon, y=lat)) +
 # geom_hdr is a more useful way of visualising the 50% etc KDE of points.  You can set different probabilities.
 # And you can use different methods of calculating density - the default is KDE.
 
-# Add density kernel using geom_density2d_filled - more visually appealing altenative but not as useful as geom_hdr
+# Add density kernel using geom_density2d_filled - more visually appealing alternative but not as useful as geom_hdr
 # map2<-map1 + geom_density2d_filled(data=c13, contour_var = "ndensity", bins=8, alpha=0.2, aes(x=x, y=y))
 
 # Add scalebar

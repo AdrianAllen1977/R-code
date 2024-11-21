@@ -38,6 +38,9 @@ geom_errorbar(aes(ymax=HPD_upper, ymin=HPD_lower)) +
   xlab("BEAST model") +
   ylab("Substitution Rate")
 
+#### If you need to add subscript or superscript you can use expression for an axis label
+ylab(expression(~Effective ~population ~size ~(N[e])))  ## [] adds subscript, ^ adds superscipt ~ to separate all components of label
+
 ## If you need to make discrete label changes o remove underscores etc
 
 a2<- a + scale_x_discrete(labels=c("yourname1", "yourname2"))
